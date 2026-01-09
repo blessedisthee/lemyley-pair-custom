@@ -1,6 +1,8 @@
 FROM node:20-bullseye-slim
 
+# Install system dependencies INCLUDING git
 RUN apt-get update && apt-get install -y --no-install-recommends \
+    git \
     ffmpeg \
     imagemagick \
     libwebp-dev \
