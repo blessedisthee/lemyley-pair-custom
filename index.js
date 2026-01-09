@@ -1,29 +1,38 @@
-const express = require('express');
-const app = express();
-__path = process.cwd()
+const express = require("express");
 const bodyParser = require("body-parser");
+const path = require("path");
+
+const app = express();
+
 const PORT = process.env.PORT || 8000;
-let server = require('./qr'),
-    code = require('./pair');
-require('events').EventEmitter.defaultMaxListeners = 500;
-app.use('/server', server);
-app.use('/code', code);
-app.use('/pair',async (req, res, next) => {
-res.sendFile(__path + '/pair.html')
-})
-app.use('/qr',async (req, res, next) => {
-res.sendFile(__path + '/qr.html')
-})
-app.use('/',async (req, res, next) => {
-res.sendFile(__path + '/main.html')
-})
+
+const server = require("./qr");
+const code = require("./pair");
+
+// Parse request bodies (place before routes)
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.listen(PORT, () => {
-    console.log(`
-Don't Forgot To Give Star MALVIN-XD
 
- Server running on http://localhost:` + PORT)
-})
+// Your existing API routes
+app.use("/server", server);
+app.use("/code", code);
 
-module.exports = app
+// Serve HTML pages
+app.get("/pair", (req, res) => {
+  res.sendFile(path.join(process.cwd(), "pair.html"));
+});
+
+app.get("/qr", (req, res) => {
+  res.sendFile(path.join(process.cwd(), "qr.html"));
+});
+
+app.get("/", (req, res) => {
+  res.sendFile(path.join(process.cwd(), "main.html"));
+});
+
+// IMPORTANT: Bind to 0.0.0.0 on Render
+app.listen(PORT, "0.0.0.0", () => {
+  console.log("Server running on port " + PORT);
+});
+
+module.exports = app;
