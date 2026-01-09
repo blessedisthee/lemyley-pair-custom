@@ -1,8 +1,9 @@
-FROM node:20-bullseye-slim
+FROM node:20-bullseye
 
-# Install system dependencies INCLUDING git
-RUN apt-get update && apt-get install -y --no-install-recommends \
+# Install system dependencies (git + ssh REQUIRED)
+RUN apt-get update && apt-get install -y \
     git \
+    openssh-client \
     ffmpeg \
     imagemagick \
     libwebp-dev \
